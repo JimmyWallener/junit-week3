@@ -4,10 +4,8 @@
 
 package com.jaliansystems.javadriver.examples.swing.ut;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,6 +28,7 @@ public class LoginDialog extends JFrame {
     private final JTextField tfUsername;
     private final JPasswordField pfPassword;
     private final JButton btnLogin;
+    private final JLabel capsWarning;
     private boolean succeeded;
 
     public LoginDialog() {
@@ -38,6 +37,7 @@ public class LoginDialog extends JFrame {
 
         //
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setPreferredSize(new Dimension(300,200));
         GridBagConstraints cs = new GridBagConstraints();
 
         cs.fill = GridBagConstraints.HORIZONTAL;
@@ -70,6 +70,15 @@ public class LoginDialog extends JFrame {
         cs.gridwidth = 2;
         panel.add(pfPassword, cs);
         panel.setBorder(new LineBorder(Color.GRAY));
+
+        capsWarning = new JLabel();
+        capsWarning.setBackground(Color.RED);
+        capsWarning.setOpaque(true);
+        capsWarning.setForeground(Color.white);
+        cs.gridx = 1;
+        cs.gridy = 2;
+        cs.gridwidth = 1;
+        panel.add(capsWarning,cs);
 
         btnLogin = new JButton("Login");
         btnLogin.setName("login_button");
@@ -111,16 +120,19 @@ public class LoginDialog extends JFrame {
             @Override
             public void removeUpdate(DocumentEvent e) {
                 enableLoginButton();
+                capsLockWarning();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
                 enableLoginButton();
+                capsLockWarning();
             }
 
             @Override
             public void changedUpdate(DocumentEvent e) {
                 enableLoginButton();
+                capsLockWarning();
             }
         });
         JButton btnCancel = new JButton("Cancel");
@@ -139,6 +151,16 @@ public class LoginDialog extends JFrame {
         pack();
         setResizable(false);
         setLocationRelativeTo(null);
+    }
+
+    public boolean capsLockWarning() {
+        if (Toolkit.getDefaultToolkit().getLockingKeyState(KeyEvent.VK_CAPS_LOCK)) {
+            capsWarning.setText("CAPS LOCK IS ON");
+            return true;
+        } else {
+            capsWarning.setText("");
+        }
+        return false;
     }
 
     private void enableLoginButton() {

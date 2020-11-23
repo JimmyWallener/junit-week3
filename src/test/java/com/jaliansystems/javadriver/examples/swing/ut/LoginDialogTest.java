@@ -4,6 +4,7 @@ import net.sourceforge.marathon.javadriver.JavaDriver;
 import net.sourceforge.marathon.javadriver.JavaProfile;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchMode;
 import net.sourceforge.marathon.javadriver.JavaProfile.LaunchType;
+import org.junit.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -29,6 +30,11 @@ public class LoginDialogTest {
     private WebDriverWait wait;
     private final Logger logger = Logger.getLogger(LoginDialogTest.class.getName());
 
+
+    @Before
+    public void setUp(){
+        logger.info("JUNIT 4 BEFORE");
+    }
 
     @BeforeEach
     void init() {
@@ -118,5 +124,12 @@ public class LoginDialogTest {
         for (WebElement tc : textComponents) {
             assertNotEquals(null, tc.getAttribute("toolTipText"), "Tooltip returned null");
         }
+    }
+
+    @DisplayName("Test if Caps-lock is on, pass if CAPS not on, fail if on")
+    @Test
+    public void testCapsLockWarning(){
+        boolean isCapsOn = login.capsLockWarning();
+        assertFalse(isCapsOn);
     }
 }
